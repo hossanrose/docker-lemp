@@ -1,0 +1,24 @@
+version: '3'
+services:
+  mariadb:
+    image: mariadb:latest
+    volumes:
+       - ./mariadb/data:/var/lib/mysql
+    env_file:
+       - .env
+  phpfpm:
+   build: ./phpfpm/
+   volumes:
+       - ./nginx/files:/home/techie
+       - ./phpfpm/config/php.ini:/usr/local/etc/php/php.ini
+       - ./phpfpm/logs:/var/log
+  nginx:
+   image: nginx:alpine
+   volumes:
+       - ./nginx/conf.d:/etc/nginx/conf.d 
+       - ./nginx/certs:/etc/nginx/certs 
+       - ./nginx/log:/var/log/nginx
+       - ./nginx/files:/home/techie
+   ports:
+       - 80:80
+       - 443:443
